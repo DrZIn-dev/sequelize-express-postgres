@@ -1,10 +1,17 @@
 import express from 'express'
+import dotenv from 'dotenv'
 
-require('dotenv').config()
+import db from './database/models'
 
 const app = express()
 const port = process.env.PORT || 3000
 
-app.listen(port, () => {
-  console.log(`Server listen on port ${port}`)
+dotenv.config()
+app.use(express.urlencoded({ extended: true }))
+app.use(express.json())
+
+db.sequelize.sync().then(() => {
+  app.listen(port, () => {
+    console.log(`Server listen on port ${port}`)
+  })
 })
